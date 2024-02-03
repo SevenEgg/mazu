@@ -1,7 +1,6 @@
 import React, { useState, useRef } from 'react';
-import html2canvas from 'html2canvas';
 import domtoimage from 'dom-to-image';
-import { QIAN_DATA } from "./config";
+// import { QIAN_DATA } from "./config";
 import {
   HomePage,
   Container,
@@ -13,15 +12,37 @@ import {
   QianName,
   QianNum,
   QianContent,
-  Btn
+  Btn,
+  FormBox,
+  FormInput
 } from "./styles";
 
 const delay = (ms) => new Promise(resolve => setTimeout(resolve, ms));
 
 function Home() {
-  const [imageName, setImageName] = useState('保生大帝'); // 初始图片名称
+  const [qianName, setImageName] = useState('六十甲子籤'); // 初始图片名称
   const cardRef = useRef(null);
-  const qianName = "保生大帝六十籤";
+  const [QIAN_DATA, setJsonData] = useState([]);
+
+  const onOpenFile = ()=>{
+    document.querySelector("#files").click();
+  }
+
+  const handleJsonFileChange = (e) => {
+    const fileReader = new FileReader();
+
+    fileReader.onload = () => {
+      try {
+        const parsedData = JSON.parse(fileReader.result);
+        setJsonData(parsedData);
+      } catch (error) {
+        console.error('Error parsing JSON file:', error);
+        setJsonData(null);
+      }
+    };
+
+    fileReader.readAsText(e.target.files[0]);
+  };
 
   const handleGenerateCard = async () => {
     const cardContainerNode = cardRef.current;
@@ -37,9 +58,9 @@ function Home() {
           .then(async (dataUrl) => {
             const a = document.createElement('a');
             a.href = dataUrl;
-            a.download = `${imageName}_card_${i + 1}.png`;
+            a.download = `${qianName}_card_${i + 1}.png`;
             a.click();
-            
+
           })
           .catch((error) => {
             console.error('Error generating image:', error);
@@ -74,20 +95,29 @@ function Home() {
               </QianCardWrap>
             </QianCard>
           ))}
-
-          {/* <FormBox>
-            <h6>文件名:</h6>
-            <FormInput
-               type="text"
-               value={imageName}
-               onChange={(e) => setImageName(e.target.value)}
-            ></FormInput>
-          </FormBox> */}
-
         </QianCardContainer>
 
         <FormContainer>
-          <Btn onClick={handleGenerateCard}>保存图片</Btn>
+          <FormBox>
+            <Btn onClick={()=>onOpenFile()}>选择文件</Btn>
+            <input
+                type="file"
+                accept=".json"
+                onChange={handleJsonFileChange}
+                className='hidden'
+                id="files"
+              />
+          </FormBox>
+          <FormBox>
+            <h6>文件名:</h6>
+            <FormInput
+               type="text"
+               value={qianName}
+               onChange={(e) => setImageName(e.target.value)}
+            ></FormInput>
+          </FormBox>
+          {QIAN_DATA.length>0 &&  <Btn onClick={handleGenerateCard}>保存图片</Btn>}
+         
         </FormContainer>
 
       </Container>
@@ -95,63 +125,5 @@ function Home() {
     </HomePage >
   );
 }
-
-// 多卡片
-// function Home() {
-//   const [imageName, setImageName] = useState('custom_image_name');
-//   const cardContainerRef = useRef(null);
-
-//   const cards = [
-//     { id: 1, content: 'Card 1 Content' },
-//     { id: 2, content: 'Card 2 Content' },
-//     { id: 3, content: 'Card 3 Content' },
-//     // Add more cards as needed
-//   ];
-
-//   const handleGenerateCards = async () => {
-//     const cardContainerNode = cardContainerRef.current;
-
-//     if (cardContainerNode) {
-//       const cardsNodes = cardContainerNode.childNodes;
-
-//       for (let i = 0; i < cardsNodes.length; i++) {
-//         const cardNode = cardsNodes[i];
-//         const canvas = await html2canvas(cardNode);
-//         const imageURL = canvas.toDataURL('image/png');
-
-//         const a = document.createElement('a');
-//         a.href = imageURL;
-//         a.download = `${imageName}_card_${i + 1}.png`;
-//         a.click();
-//       }
-//     }
-//   };
-
-//   return (
-//     <div>
-//       <div ref={cardContainerRef}>
-//         {cards.map((card) => (
-//           <div key={card.id} style={{ border: '1px solid #000', padding: '20px', width: '300px', marginBottom: '20px' }}>
-//             <h1>{card.content}</h1>
-//             {/* Add more card content here */}
-//           </div>
-//         ))}
-//       </div>
-
-//       <div>
-//         <label>
-//           Image Name:
-//           <input
-//             type="text"
-//             value={imageName}
-//             onChange={(e) => setImageName(e.target.value)}
-//           />
-//         </label>
-//       </div>
-
-//       <button onClick={handleGenerateCards}>Generate Cards</button>
-//     </div>
-//   );
-// }
 
 export default Home;

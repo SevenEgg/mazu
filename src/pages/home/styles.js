@@ -13,7 +13,7 @@ export const HomeTitle = styled.h2`
 export const Container = styled.div`
     display: flex;
     justify-content: space-around;
-    width: 850px;
+    width: 904px;
     margin: 0 auto;
 `
 
@@ -74,10 +74,13 @@ export const FormBox = styled.div`
         font-size: 16px;
         margin-bottom: 5px;
     }
+    .hidden{
+        display: none;
+    }
 `
 
 export const FormInput = styled.input`
-    width: 235px;
+  
     padding: 15px 10px;
     border: 1px solid #bea366;
     border-radius: 5px;
