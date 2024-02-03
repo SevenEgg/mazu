@@ -94,4 +94,5 @@ export const Btn = styled.div`
     font-weight: bold;
     border-radius: 5px;
     cursor: pointer;
+    text-align: center;
 `

@@ -98,6 +98,14 @@ function Home() {
         </QianCardContainer>
 
         <FormContainer>
+        <FormBox>
+            <h6>签名:</h6>
+            <FormInput
+               type="text"
+               value={qianName}
+               onChange={(e) => setImageName(e.target.value)}
+            ></FormInput>
+          </FormBox>
           <FormBox>
             <Btn onClick={()=>onOpenFile()}>选择文件</Btn>
             <input
@@ -108,14 +116,7 @@ function Home() {
                 id="files"
               />
           </FormBox>
-          <FormBox>
-            <h6>文件名:</h6>
-            <FormInput
-               type="text"
-               value={qianName}
-               onChange={(e) => setImageName(e.target.value)}
-            ></FormInput>
-          </FormBox>
+          
           {QIAN_DATA.length>0 &&  <Btn onClick={handleGenerateCard}>保存图片</Btn>}
          
         </FormContainer>
