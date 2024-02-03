@@ -1,0 +1,14 @@
+*{
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  box-sizing: border-box;
+}
+
+body{
+    background-image: url(./assets/img//bodyBg.png);
+    background-repeat: repeat;
+    letter-spacing: 1px;
+    color: #795548;
+    overflow-x: hidden;
+}
